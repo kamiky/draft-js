@@ -36,7 +36,7 @@ function getAnonymizedDOM(
   }
 
   invariant(
-    anonymized instanceof Element,
+    anonymized instanceof anonymized.ownerDocument.defaultView.Element,
     'Node must be an Element if it is not a text node.',
   );
   return anonymized.outerHTML;
@@ -78,7 +78,7 @@ function getAnonymizedEditorDOM(
   let currentNode = node;
   while (currentNode) {
     if (
-      currentNode instanceof Element &&
+      currentNode instanceof currentNode.ownerDocument.defaultView.Element &&
       currentNode.hasAttribute('contenteditable')
     ) {
       // found the Draft editor container

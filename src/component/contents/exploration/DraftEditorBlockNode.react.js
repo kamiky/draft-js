@@ -254,7 +254,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
       }
     } else {
       invariant(
-        blockNode instanceof HTMLElement,
+        blockNode instanceof blockNode.ownerDocument.defaultView.HTMLElement,
         'blockNode is not an HTMLElement',
       );
       const blockBottom = blockNode.offsetHeight + blockNode.offsetTop;

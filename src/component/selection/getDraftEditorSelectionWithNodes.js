@@ -125,7 +125,7 @@ function getFirstLeaf(node: any): Node {
   while (
     node.firstChild &&
     // data-blocks has no offset
-    ((node.firstChild instanceof Element &&
+    ((node.firstChild instanceof node.ownerDocument.defaultView.Element &&
       node.firstChild.getAttribute('data-blocks') === 'true') ||
       getSelectionOffsetKeyForNode(node.firstChild))
   ) {
@@ -141,7 +141,7 @@ function getLastLeaf(node: any): Node {
   while (
     node.lastChild &&
     // data-blocks has no offset
-    ((node.lastChild instanceof Element &&
+    ((node.lastChild instanceof node.ownerDocument.defaultView.Element &&
       node.lastChild.getAttribute('data-blocks') === 'true') ||
       getSelectionOffsetKeyForNode(node.lastChild))
   ) {
@@ -169,7 +169,7 @@ function getPointForNonTextNode(
   if (editorRoot === node) {
     node = node.firstChild;
     invariant(
-      node instanceof Element && node.getAttribute('data-contents') === 'true',
+      node instanceof node.ownerDocument.defaultView.Element && node.getAttribute('data-contents') === 'true',
       'Invalid DraftEditorContents structure.',
     );
     if (childOffset > 0) {

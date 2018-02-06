@@ -198,7 +198,7 @@ const processInlineTag = (
   const styleToCheck = inlineTags[tag];
   if (styleToCheck) {
     currentStyle = currentStyle.add(styleToCheck).toOrderedSet();
-  } else if (node instanceof HTMLElement) {
+  } else if (node instanceof node.ownerDocument.defaultView.HTMLElement) {
     const htmlElement = node;
     currentStyle = currentStyle
       .withMutations(style => {
@@ -284,7 +284,7 @@ const containsSemanticBlockMarkup = (
 
 const hasValidLinkText = (link: Node): boolean => {
   invariant(
-    link instanceof HTMLAnchorElement,
+    link instanceof link.ownerDocument.defaultView.HTMLAnchorElement,
     'Link must be an HTMLAnchorElement.',
   );
   const protocol = link.protocol;
@@ -431,7 +431,7 @@ const genFragment = (
   // IMG tags
   if (
     nodeName === 'img' &&
-    node instanceof HTMLImageElement &&
+    node instanceof node.ownerDocument.defaultView.HTMLImageElement  &&
     node.attributes.getNamedItem('src') &&
     node.attributes.getNamedItem('src').value
   ) {
@@ -475,7 +475,7 @@ const genFragment = (
   if (
     !experimentalTreeDataSupport &&
     nodeName === 'li' &&
-    node instanceof HTMLElement
+    node instanceof node.ownerDocument.defaultView.HTMLElement
   ) {
     depth = getListItemDepth(node, depth);
   }
@@ -510,7 +510,7 @@ const genFragment = (
 
   while (child) {
     if (
-      child instanceof HTMLAnchorElement &&
+      child instanceof child.ownerDocument.defaultView.HTMLAnchorElement &&
       child.href &&
       hasValidLinkText(child)
     ) {

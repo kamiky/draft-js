@@ -45,7 +45,7 @@ function editOnCut(editor: DraftEditor, e: SyntheticClipboardEvent<>): void {
 
   // Track the current scroll position so that it can be forced back in place
   // after the editor regains control of the DOM.
-  if (element instanceof Node) {
+  if (element instanceof element.ownerDocument.defaultView.Node) {
     scrollPosition = getScrollPosition(Style.getScrollParent(element));
   }
 
