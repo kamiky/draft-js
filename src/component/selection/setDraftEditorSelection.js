@@ -119,7 +119,7 @@ function setDraftEditorSelection(
     return;
   }
 
-  const selection = global.getSelection();
+  const selection = node.ownerDocument.defaultView.getSelection();
   let anchorKey = selectionState.getAnchorKey();
   let anchorOffset = selectionState.getAnchorOffset();
   let focusKey = selectionState.getFocusKey();

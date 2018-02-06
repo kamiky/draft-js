@@ -30,7 +30,7 @@ function editOnBlur(editor: DraftEditor, e: SyntheticEvent<>): void {
   // element is `body` to force it when blurring occurs within the window (as
   // opposed to clicking to another tab or window).
   if (getActiveElement() === document.body) {
-    const selection = global.getSelection();
+    const selection = editor.editor.ownerDocument.defaultView.getSelection();
     const editorNode = editor.editor;
     if (
       selection.rangeCount === 1 &&
