@@ -237,7 +237,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
     }
 
     const blockNode = ReactDOM.findDOMNode(this);
-    const win = blockNode.ownerDocument.defaultView;
+    const win = blockNode.ownerDocument.defaultView || window;
     const scrollParent = Style.getScrollParent(blockNode);
     const scrollPosition = getScrollPosition(scrollParent);
     let scrollDelta;
@@ -255,7 +255,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
       }
     } else {
       invariant(
-        blockNode instanceof blockNode.ownerDocument.defaultView.HTMLElement,
+        blockNode instanceof win.HTMLElement,
         'blockNode is not an HTMLElement',
       );
       const blockBottom = blockNode.offsetHeight + blockNode.offsetTop;

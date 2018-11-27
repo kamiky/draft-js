@@ -122,10 +122,11 @@ function getDraftEditorSelectionWithNodes(
  * Identify the first leaf descendant for the given node.
  */
 function getFirstLeaf(node: any): Node {
+  const win = node.ownerDocument.defaultView || window;
   while (
     node.firstChild &&
     // data-blocks has no offset
-    ((node.firstChild instanceof node.ownerDocument.defaultView.Element &&
+    ((node.firstChild instanceof win.Element &&
       node.firstChild.getAttribute('data-blocks') === 'true') ||
       getSelectionOffsetKeyForNode(node.firstChild))
   ) {
@@ -138,10 +139,11 @@ function getFirstLeaf(node: any): Node {
  * Identify the last leaf descendant for the given node.
  */
 function getLastLeaf(node: any): Node {
+  const win = node.ownerDocument.defaultView || window;
   while (
     node.lastChild &&
     // data-blocks has no offset
-    ((node.lastChild instanceof node.ownerDocument.defaultView.Element &&
+    ((node.lastChild instanceof win.Element &&
       node.lastChild.getAttribute('data-blocks') === 'true') ||
       getSelectionOffsetKeyForNode(node.lastChild))
   ) {
@@ -166,10 +168,11 @@ function getPointForNonTextNode(
 
   // If the editorRoot is the selection, step downward into the content
   // wrapper.
+  const win = node.ownerDocument.defaultView || window;
   if (editorRoot === node) {
     node = node.firstChild;
     invariant(
-      node instanceof node.ownerDocument.defaultView.Element && node.getAttribute('data-contents') === 'true',
+      node instanceof win.Element && node.getAttribute('data-contents') === 'true',
       'Invalid DraftEditorContents structure.',
     );
     if (childOffset > 0) {

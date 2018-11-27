@@ -80,8 +80,9 @@ class DraftEditorTextNode extends React.Component<Props> {
 
   shouldComponentUpdate(nextProps: Props): boolean {
     const node = ReactDOM.findDOMNode(this);
+    const win = node.ownerDocument.defaultView || window;
     const shouldBeNewline = nextProps.children === '';
-    invariant(node instanceof node.ownerDocument.defaultView.Element, 'node is not an Element');
+    invariant(node instanceof win.Element, 'node is not an Element');
     if (shouldBeNewline) {
       return !isNewline(node);
     }

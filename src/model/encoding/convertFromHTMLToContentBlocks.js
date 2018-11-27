@@ -195,10 +195,11 @@ const processInlineTag = (
   node: Node,
   currentStyle: DraftInlineStyle,
 ): DraftInlineStyle => {
+  const win = node.ownerDocument.defaultView || window;
   const styleToCheck = inlineTags[tag];
   if (styleToCheck) {
     currentStyle = currentStyle.add(styleToCheck).toOrderedSet();
-  } else if (node instanceof node.ownerDocument.defaultView.HTMLElement) {
+  } else if (node instanceof win.HTMLElement) {
     const htmlElement = node;
     currentStyle = currentStyle
       .withMutations(style => {
@@ -283,8 +284,9 @@ const containsSemanticBlockMarkup = (
 };
 
 const hasValidLinkText = (link: Node): boolean => {
+  const win = link.ownerDocument.defaultView || window;
   invariant(
-    link instanceof link.ownerDocument.defaultView.HTMLAnchorElement,
+    link instanceof win.HTMLAnchorElement,
     'Link must be an HTMLAnchorElement.',
   );
   const protocol = link.protocol;
@@ -368,6 +370,7 @@ const genFragment = (
   parentKey?: ?string,
 ): {chunk: Chunk, entityMap: EntityMap} => {
   const lastLastBlock = lastBlock;
+  const win = node.ownerDocument.defaultView || window;
   let nodeName = node.nodeName.toLowerCase();
   let newEntityMap = entityMap;
   let nextBlockType = 'unstyled';
@@ -431,7 +434,7 @@ const genFragment = (
   // IMG tags
   if (
     nodeName === 'img' &&
-    node instanceof node.ownerDocument.defaultView.HTMLImageElement  &&
+    node instanceof win.HTMLImageElement  &&
     node.attributes.getNamedItem('src') &&
     node.attributes.getNamedItem('src').value
   ) {
@@ -475,7 +478,7 @@ const genFragment = (
   if (
     !experimentalTreeDataSupport &&
     nodeName === 'li' &&
-    node instanceof node.ownerDocument.defaultView.HTMLElement
+    node instanceof win.HTMLElement
   ) {
     depth = getListItemDepth(node, depth);
   }
@@ -510,7 +513,7 @@ const genFragment = (
 
   while (child) {
     if (
-      child instanceof child.ownerDocument.defaultView.HTMLAnchorElement &&
+      child instanceof win.HTMLAnchorElement &&
       child.href &&
       hasValidLinkText(child)
     ) {

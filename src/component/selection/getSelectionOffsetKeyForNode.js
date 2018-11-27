@@ -18,7 +18,8 @@
  * found on the DOM tree of given node.
  */
 function getSelectionOffsetKeyForNode(node: Node): ?string {
-  if (node instanceof node.ownerDocument.defaultView.Element) {
+  const win = node.ownerDocument.defaultView || window;
+  if (node instanceof win.Element) {
     const offsetKey = node.getAttribute('data-offset-key');
     if (offsetKey) {
       return offsetKey;
