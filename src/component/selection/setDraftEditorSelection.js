@@ -114,10 +114,11 @@ function setDraftEditorSelection(
   nodeStart: number,
   nodeEnd: number,
 ): void {
+  const doc = node.ownerDocument.documentElement || document;
   // It's possible that the editor has been removed from the DOM but
   // our selection code doesn't know it yet. Forcing selection in
   // this case may lead to errors, so just bail now.
-  if (!containsNode(node.ownerDocument.documentElement, node)) {
+  if (!containsNode(doc, node)) {
     return;
   }
 
@@ -238,6 +239,7 @@ function addFocusToSelection(
   selectionState: SelectionState,
 ): void {
   const activeElement = getActiveElement();
+  const contains = containsNode(activeElement, node) || containsNode(activeElement.contentDocument, node);
   if (selection.extend && containsNode(activeElement, node)) {
     // If `extend` is called while another element has focus, an error is
     // thrown. We therefore disable `extend` if the active element is somewhere
