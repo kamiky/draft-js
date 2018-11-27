@@ -4966,7 +4966,7 @@ var DraftEditorBlock = function (_React$Component) {
         window.scrollTo(scrollPosition.x, scrollPosition.y + scrollDelta + SCROLL_BUFFER);
       }
     } else {
-      !(blockNode instanceof HTMLElement) ?  true ? invariant(false, 'blockNode is not an HTMLElement') : invariant(false) : void 0;
+      !(blockNode instanceof blockNode.ownerDocument.defaultView.HTMLElement) ?  true ? invariant(false, 'blockNode is not an HTMLElement') : invariant(false) : void 0;
       var blockBottom = blockNode.offsetHeight + blockNode.offsetTop;
       var scrollBottom = scrollParent.offsetHeight + scrollPosition.y;
       scrollDelta = blockBottom - scrollBottom;
@@ -11465,7 +11465,7 @@ var DraftEditorTextNode = function (_React$Component) {
   DraftEditorTextNode.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
     var node = ReactDOM.findDOMNode(this);
     var shouldBeNewline = nextProps.children === '';
-    !(node instanceof Element) ?  true ? invariant(false, 'node is not an Element') : invariant(false) : void 0;
+    !(node instanceof node.ownerDocument.defaultView.Element) ?  true ? invariant(false, 'node is not an Element') : invariant(false) : void 0;
     if (shouldBeNewline) {
       return !isNewline(node);
     }
@@ -16873,7 +16873,7 @@ function editOnSelect(editor) {
     return;
   }
 
-  console.log('editOnSelect fork test !');
+  console.log('editOnSelect fork test 2 !');
 
   var editorState = editor.props.editorState;
   var editorNode = ReactDOM.findDOMNode(editor.editorContainer);
