@@ -32,7 +32,8 @@ function getAnonymizedDOM(node: Node, getNodeLabels?: (n: Node) => Array<string>
     return anonymized.textContent;
   }
 
-  invariant(anonymized instanceof Element, 'Node must be an Element if it is not a text node.');
+  const win = anonymized.ownerDocument.defaultView || window;
+  invariant(anonymized instanceof win.Element, 'Node must be an Element if it is not a text node.');
   return anonymized.outerHTML;
 }
 
@@ -59,8 +60,9 @@ function anonymizeTextWithin(node: Node, getNodeLabels?: (n: Node) => Array<stri
 function getAnonymizedEditorDOM(node: Node, getNodeLabels?: (n: Node) => Array<string>): string {
   // grabbing the DOM content of the Draft editor
   let currentNode = node;
+  const win = node.ownerDocument.defaultView || window;
   while (currentNode) {
-    if (currentNode instanceof Element && currentNode.hasAttribute('contenteditable')) {
+    if (currentNode instanceof win.Element && currentNode.hasAttribute('contenteditable')) {
       // found the Draft editor container
       return getAnonymizedDOM(currentNode, getNodeLabels);
     } else {
@@ -84,14 +86,15 @@ function getNodeLength(node: Node): number {
  * versions, we use the old IE API to create our selections.
  */
 function setDraftEditorSelection(selectionState: SelectionState, node: Node, blockKey: string, nodeStart: number, nodeEnd: number): void {
+  const doc = node.ownerDocument.documentElement || document;
   // It's possible that the editor has been removed from the DOM but
   // our selection code doesn't know it yet. Forcing selection in
   // this case may lead to errors, so just bail now.
-  if (!containsNode(document.documentElement, node)) {
+  if (!containsNode(doc, node)) {
     return;
   }
 
-  const selection = global.getSelection();
+  const selection = node.ownerDocument.defaultView.getSelection();
   let anchorKey = selectionState.getAnchorKey();
   let anchorOffset = selectionState.getAnchorOffset();
   let focusKey = selectionState.getFocusKey();
@@ -164,7 +167,8 @@ function setDraftEditorSelection(selectionState: SelectionState, node: Node, blo
  */
 function addFocusToSelection(selection: Object, node: Node, offset: number, selectionState: SelectionState): void {
   const activeElement = getActiveElement();
-  if (selection.extend && containsNode(activeElement, node)) {
+  const contains = containsNode(activeElement, node) || containsNode(activeElement.contentDocument, node);
+  if (selection.extend && contains) {
     // If `extend` is called while another element has focus, an error is
     // thrown. We therefore disable `extend` if the active element is somewhere
     // other than the node we are selecting. This should only occur in Firefox,
@@ -231,7 +235,7 @@ function addFocusToSelection(selection: Object, node: Node, offset: number, sele
 }
 
 function addPointToSelection(selection: Object, node: Node, offset: number, selectionState: SelectionState): void {
-  const range = document.createRange();
+  const range = node.ownerDocument.createRange();
   // logging to catch bug that is being reported in t16250795
   if (offset > getNodeLength(node)) {
     // in this case we know that the call to 'range.setStart' is about to throw

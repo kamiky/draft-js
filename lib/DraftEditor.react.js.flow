@@ -377,7 +377,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
      * ie9-beta-minor-change-list.aspx
      */
     if (isIE) {
-      document.execCommand('AutoUrlDetect', false, false);
+      ReactDOM.findDOMNode(this.refs.editor).ownerDocument.execCommand('AutoUrlDetect', false, false);
     }
   }
 
@@ -410,14 +410,16 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
 
     const scrollParent = Style.getScrollParent(editorNode);
     const { x, y } = scrollPosition || getScrollPosition(scrollParent);
+    const { defaultView } = editorNode.ownerDocument;
 
-    invariant(editorNode instanceof HTMLElement, 'editorNode is not an HTMLElement');
+    const win = editorNode.ownerDocument.defaultView || window;
+    invariant(editorNode instanceof win.HTMLElement, 'editorNode is not an HTMLElement');
 
     editorNode.focus();
 
     // Restore scroll position
-    if (scrollParent === window) {
-      window.scrollTo(x, y);
+    if (scrollParent === defaultView) {
+      defaultView.scrollTo(x, y);
     } else {
       Scroll.setTop(scrollParent, y);
     }
@@ -433,7 +435,8 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
 
   blur = (): void => {
     const editorNode = ReactDOM.findDOMNode(this.editor);
-    invariant(editorNode instanceof HTMLElement, 'editorNode is not an HTMLElement');
+    const win = editorNode.ownerDocument.defaultView || window;
+    invariant(editorNode instanceof win.HTMLElement, 'editorNode is not an HTMLElement');
     editorNode.blur();
   };
 

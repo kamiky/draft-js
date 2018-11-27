@@ -19,7 +19,8 @@
  */
 
 function getSelectionOffsetKeyForNode(node: Node): ?string {
-  if (node instanceof Element) {
+  const win = node.ownerDocument.defaultView || window;
+  if (node instanceof win.Element) {
     const offsetKey = node.getAttribute('data-offset-key');
     if (offsetKey) {
       return offsetKey;

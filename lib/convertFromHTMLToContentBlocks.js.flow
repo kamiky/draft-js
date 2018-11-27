@@ -165,10 +165,11 @@ const getBlockTypeForTag = (tag: string, lastList: ?string, blockRenderMap: Draf
 };
 
 const processInlineTag = (tag: string, node: Node, currentStyle: DraftInlineStyle): DraftInlineStyle => {
+  const win = node.ownerDocument.defaultView || window;
   const styleToCheck = inlineTags[tag];
   if (styleToCheck) {
     currentStyle = currentStyle.add(styleToCheck).toOrderedSet();
-  } else if (node instanceof HTMLElement) {
+  } else if (node instanceof win.HTMLElement) {
     const htmlElement = node;
     currentStyle = currentStyle.withMutations(style => {
       const fontWeight = htmlElement.style.fontWeight;
@@ -244,7 +245,8 @@ const containsSemanticBlockMarkup = (html: string, blockTags: Array<string>): bo
 };
 
 const hasValidLinkText = (link: Node): boolean => {
-  invariant(link instanceof HTMLAnchorElement, 'Link must be an HTMLAnchorElement.');
+  const win = link.ownerDocument.defaultView || window;
+  invariant(link instanceof win.HTMLAnchorElement, 'Link must be an HTMLAnchorElement.');
   const protocol = link.protocol;
   return protocol === 'http:' || protocol === 'https:' || protocol === 'mailto:';
 };
@@ -307,6 +309,7 @@ const getListItemDepth = (node: HTMLElement, depth: number = 0): number => {
 
 const genFragment = (entityMap: EntityMap, node: Node, inlineStyle: DraftInlineStyle, lastList: string, inBlock: ?string, blockTags: Array<string>, depth: number, blockRenderMap: DraftBlockRenderMap, inEntity?: ?string, parentKey?: ?string): { chunk: Chunk; entityMap: EntityMap; } => {
   const lastLastBlock = lastBlock;
+  const win = node.ownerDocument.defaultView || window;
   let nodeName = node.nodeName.toLowerCase();
   let newEntityMap = entityMap;
   let nextBlockType = 'unstyled';
@@ -367,7 +370,7 @@ const genFragment = (entityMap: EntityMap, node: Node, inlineStyle: DraftInlineS
   }
 
   // IMG tags
-  if (nodeName === 'img' && node instanceof HTMLImageElement && node.attributes.getNamedItem('src') && node.attributes.getNamedItem('src').value) {
+  if (nodeName === 'img' && node instanceof win.HTMLImageElement && node.attributes.getNamedItem('src') && node.attributes.getNamedItem('src').value) {
     const image: HTMLImageElement = node;
     const entityConfig = {};
 
@@ -405,7 +408,7 @@ const genFragment = (entityMap: EntityMap, node: Node, inlineStyle: DraftInlineS
     lastList = nodeName;
   }
 
-  if (!experimentalTreeDataSupport && nodeName === 'li' && node instanceof HTMLElement) {
+  if (!experimentalTreeDataSupport && nodeName === 'li' && node instanceof win.HTMLElement) {
     depth = getListItemDepth(node, depth);
   }
 
@@ -435,7 +438,7 @@ const genFragment = (entityMap: EntityMap, node: Node, inlineStyle: DraftInlineS
   let entityId: ?string = null;
 
   while (child) {
-    if (child instanceof HTMLAnchorElement && child.href && hasValidLinkText(child)) {
+    if (child instanceof win.HTMLAnchorElement && child.href && hasValidLinkText(child)) {
       const anchor: HTMLAnchorElement = child;
       const entityConfig = {};
 
