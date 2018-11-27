@@ -240,7 +240,7 @@ function addFocusToSelection(
 ): void {
   const activeElement = getActiveElement();
   const contains = containsNode(activeElement, node) || containsNode(activeElement.contentDocument, node);
-  if (selection.extend && containsNode(activeElement, node)) {
+  if (selection.extend && contains) {
     // If `extend` is called while another element has focus, an error is
     // thrown. We therefore disable `extend` if the active element is somewhere
     // other than the node we are selecting. This should only occur in Firefox,
