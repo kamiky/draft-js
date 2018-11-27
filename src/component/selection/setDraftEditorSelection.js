@@ -115,7 +115,7 @@ function setDraftEditorSelection(
   // It's possible that the editor has been removed from the DOM but
   // our selection code doesn't know it yet. Forcing selection in
   // this case may lead to errors, so just bail now.
-  if (!containsNode(document.documentElement, node)) {
+  if (!containsNode(node.ownerDocument.documentElement, node)) {
     return;
   }
 
@@ -316,7 +316,7 @@ function addPointToSelection(
   offset: number,
   selectionState: SelectionState,
 ): void {
-  const range = document.createRange();
+  const range = node.ownerDocument.createRange();
   // logging to catch bug that is being reported in t16250795
   if (offset > getNodeLength(node)) {
     // in this case we know that the call to 'range.setStart' is about to throw
