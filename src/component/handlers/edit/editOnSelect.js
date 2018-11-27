@@ -40,7 +40,7 @@ function editOnSelect(editor: DraftEditor): void {
     return;
   }
 
-  console.log('editOnSelect fork test !')
+  console.log('editOnSelect fork test 2 !')
 
   let editorState = editor.props.editorState;
   const editorNode = ReactDOM.findDOMNode(editor.editorContainer);
